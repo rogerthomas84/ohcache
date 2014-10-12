@@ -1,0 +1,19 @@
+{
+    "name": "rogerthomas84/ohcache",
+    "description": "OhCache is a flexible caching library for PHP",
+    "keywords": ["ohcache", "php cache", "cache adapters"],
+    "homepage": "https://github.com/rogerthomas84/ohcache",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roger Thomas",
+            "email": "rogere84@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.7"
+    },
+    "autoload": {
+        "psr-0": { "OhCache": "src" }
+    }
+}

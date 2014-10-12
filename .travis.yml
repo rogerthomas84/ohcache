@@ -1,0 +1,9 @@
+language: php
+php:
+  - 5.4
+services:
+  - memcached
+before_script:
+  - phpenv config-add travis-php.ini
+  - echo "apc.enable_cli=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini;
+

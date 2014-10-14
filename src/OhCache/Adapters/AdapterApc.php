@@ -97,6 +97,26 @@ class AdapterApc extends AdapterAbstract
     }
 
     /**
+     * Set a value in cache if it doesn't already exist. Internally, this uses
+     * apc_add
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param integer $ttl
+     * @return boolean
+     */
+    public function setIfNotExists($key, $value, $ttl = self::DEFAULT_TTL)
+    {
+        if (!$this->hasApc) {
+            // @codeCoverageIgnoreStart
+            return false;
+            // @codeCoverageIgnoreEnd
+        }
+
+        return apc_add($key, $value, $ttl);
+    }
+
+    /**
      * Establish whether the cache contains a value with key of $key. Internally,
      * this method performs a get() on the key, so it's worth using get() instead
      * if you require a value.

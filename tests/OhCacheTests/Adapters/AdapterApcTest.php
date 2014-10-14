@@ -62,6 +62,16 @@ class AdapterApcTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->adapter->get($this->name));
     }
 
+    public function testSetIfNotExistsGet()
+    {
+        $random = microtime(true);
+        $random = sha1($random);
+        $set = $this->adapter->setIfNotExists($random, 'foo', 10);
+        $this->assertTrue($set);
+        $setAgain = $this->adapter->setIfNotExists($random, 'foo', 10);
+        $this->assertFalse($setAgain);
+    }
+
     public function testSetRenew()
     {
         $this->assertTrue($this->adapter->set($this->name, 'bar', 10));

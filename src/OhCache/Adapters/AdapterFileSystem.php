@@ -232,7 +232,7 @@ class AdapterFileSystem extends AdapterAbstract
     {
         try {
             $this->helper->recursivelyDeleteFromDirectory($this->path);
-            return true;
+            return @mkdir($this->path);
 
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {

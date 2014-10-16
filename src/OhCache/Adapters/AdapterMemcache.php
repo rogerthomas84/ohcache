@@ -122,14 +122,13 @@ class AdapterMemcache extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
-        $flag = null;
-
-        if (!is_bool($value) && !is_int($value) && !is_float($value)) {
-            $flag = MEMCACHE_COMPRESSED;
-        }
-
         try {
-            return $this->memcache->set($key, $value, $flag, $ttl);
+            return $this->memcache->set(
+                $key,
+                $value,
+                $this->getFlagFromValue($value),
+                $ttl
+            );
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
         }
@@ -155,14 +154,13 @@ class AdapterMemcache extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
-        $flag = null;
-
-        if (!is_bool($value) && !is_int($value) && !is_float($value)) {
-            $flag = MEMCACHE_COMPRESSED;
-        }
-
         try {
-            return $this->memcache->add($key, $value, $flag, $ttl);
+            return $this->memcache->add(
+                $key,
+                $value,
+                $this->getFlagFromValue($value),
+                $ttl
+            );
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
         }
@@ -206,13 +204,13 @@ class AdapterMemcache extends AdapterAbstract
 
         $value = $this->get($key);
         if ($value) {
-            $flag = null;
-            if (!is_bool($value) && !is_int($value) && !is_float($value)) {
-                $flag = MEMCACHE_COMPRESSED;
-            }
-
             try {
-                return $this->memcache->replace($key, $value, $flag, $ttl);
+                return $this->memcache->replace(
+                    $key,
+                    $value,
+                    $this->getFlagFromValue($value),
+                    $ttl
+                );
                 // @codeCoverageIgnoreStart
             } catch (\Exception $e) {
             }
@@ -276,5 +274,21 @@ class AdapterMemcache extends AdapterAbstract
     private function hasConnection()
     {
         return ($this->memcache instanceof \Memcache);
+    }
+
+    /**
+     * Establish the best flag to use for a given value
+     *
+     * @param mixed $value
+     * @return integer|null
+     */
+    private function getFlagFromValue($value)
+    {
+        $flag = null;
+        if (!is_bool($value) && !is_int($value) && !is_float($value)) {
+            $flag = MEMCACHE_COMPRESSED;
+        }
+
+        return $flag;
     }
 }

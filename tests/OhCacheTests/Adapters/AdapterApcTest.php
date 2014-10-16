@@ -62,6 +62,11 @@ class AdapterApcTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->adapter->get($this->name));
     }
 
+    public function testSetGetTtlExpired()
+    {
+        $this->markTestSkipped('APC will return the value when on the same thread.');
+    }
+
     public function testSetIfNotExistsGet()
     {
         $random = microtime(true);

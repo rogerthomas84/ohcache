@@ -43,7 +43,7 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
     private $adapter = null;
 
     /**
-     * @var Directory
+     * @var FileSystemHelper
      */
     private $dir = null;
 
@@ -61,15 +61,22 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->dir = new FileSystemHelper();
         $tmpDir = sys_get_temp_dir();
-        $this->dir->createPath($tmpDir, 'OhCacheTests');
+        $this->assertTrue($this->dir->createPath($tmpDir, 'OhCacheTests'));
         $this->path = $tmpDir . FileSystemHelper::DS . 'OhCacheTests';
         $this->adapter = new AdapterFileSystem(array('path' => $this->path));
     }
 
     public function testSetGet()
     {
-        $this->adapter->set($this->name, 'bar', 10);
+        $this->assertTrue($this->adapter->set($this->name, 'bar', 10));
         $this->assertEquals('bar', $this->adapter->get($this->name));
+    }
+
+    public function testSetGetTtlExpired()
+    {
+        $this->assertTrue($this->adapter->set($this->name, 'slept', 1));
+        sleep(2);
+        $this->assertFalse($this->adapter->get($this->name));
     }
 
     public function testSetIfNotExistsGet()
@@ -226,13 +233,13 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testRemove()
     {
-        $this->adapter->set($this->name, 'foobar', 10);
-        $this->adapter->remove($this->name);
+        $this->assertTrue($this->adapter->set($this->name, 'foobar', 10));
+        $this->assertTrue($this->adapter->remove($this->name));
         $this->assertFalse($this->adapter->has($this->name));
     }
 
     public function testFlush()
     {
-        $this->adapter->flush();
+        $this->assertTrue($this->adapter->flush());
     }
 }

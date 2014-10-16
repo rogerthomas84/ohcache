@@ -70,6 +70,13 @@ class AdapterMemcacheTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $this->adapter->get($this->name));
     }
 
+    public function testSetGetTtlExpired()
+    {
+        $this->assertTrue($this->adapter->set($this->name, 'slept', 1));
+        sleep(2);
+        $this->assertFalse($this->adapter->get($this->name));
+    }
+
     public function testSetIfNotExistsGet()
     {
         $str = md5(time());

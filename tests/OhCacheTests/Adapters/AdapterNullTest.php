@@ -39,6 +39,12 @@ class AdapterNullTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($instance->set('foo', 'bar'));
     }
 
+    public function testSetIfNotExists()
+    {
+        $instance = new AdapterNull();
+        $this->assertFalse($instance->setIfNotExists('foo', 'bar'));
+    }
+
     public function testGet()
     {
         $instance = new AdapterNull();

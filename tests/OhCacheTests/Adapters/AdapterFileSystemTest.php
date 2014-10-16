@@ -72,6 +72,13 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $this->adapter->get($this->name));
     }
 
+    public function testSetIfNotExistsGet()
+    {
+        $str = md5(time());
+        $this->assertTrue($this->adapter->setIfNotExists($str, 'foobar'), 10);
+        $this->assertFalse($this->adapter->setIfNotExists($str, 'barfoo', 10));
+    }
+
     public function testAssertException()
     {
         try {

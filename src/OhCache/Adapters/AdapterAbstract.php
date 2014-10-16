@@ -46,7 +46,7 @@ abstract class AdapterAbstract
      *
      * @param array $config (optional)
      */
-    abstract function __construct(array $config = array());
+    abstract public function __construct(array $config = array());
 
     /**
      * Get a value from cache by key name
@@ -54,7 +54,7 @@ abstract class AdapterAbstract
      * @param mixed $key
      * @return mixed|boolean false
      */
-    abstract function get($key);
+    abstract public function get($key);
 
     /**
      * Set a value in cache by key name, specifying the TTL
@@ -64,7 +64,17 @@ abstract class AdapterAbstract
      * @param integer $ttl
      * @return boolean
      */
-    abstract function set($key, $value, $ttl = self::DEFAULT_TTL);
+    abstract public function set($key, $value, $ttl = self::DEFAULT_TTL);
+
+    /**
+     * Set a value in cache if it doesn't already exist.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param integer $ttl
+     * @return boolean
+     */
+    abstract public function setIfNotExists($key, $value, $ttl = self::DEFAULT_TTL);
 
     /**
      * Establish whether the cache contains a value with key of $key. Internally,
@@ -78,7 +88,7 @@ abstract class AdapterAbstract
      * @param string $key
      * @return boolean
      */
-    abstract function has($key);
+    abstract public function has($key);
 
     /**
      * Alter the TTL for a given key. Essentially, renewing it in
@@ -88,7 +98,7 @@ abstract class AdapterAbstract
      * @param integer $ttl
      * @return boolean
      */
-    abstract function renew($key, $ttl = self::DEFAULT_TTL);
+    abstract public function renew($key, $ttl = self::DEFAULT_TTL);
 
     /**
      * Remove a value from cache by $key
@@ -96,12 +106,12 @@ abstract class AdapterAbstract
      * @param string $key
      * @return boolean
      */
-    abstract function remove($key);
+    abstract public function remove($key);
 
     /**
      * Flush the entire cache.
      *
      * @return boolean
      */
-    abstract function flush();
+    abstract public function flush();
 }

@@ -150,6 +150,24 @@ class AdapterFileSystem extends AdapterAbstract
     }
 
     /**
+     * Set a value in cache if it doesn't already exist. Internally, this uses the self::has() and
+     * self::set() methods.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param integer $ttl
+     * @return boolean
+     */
+    public function setIfNotExists($key, $value, $ttl = self::DEFAULT_TTL)
+    {
+        if (false === $this->has($key)) {
+            return $this->set($key, $value, $ttl);
+        }
+
+        return false;
+    }
+
+    /**
      * Establish whether the cache contains a value with key of $key. Internally,
      * this method performs a get() on the key, so it's worth using get() instead
      * if you require a value.

@@ -71,6 +71,19 @@ class AdapterNull extends AdapterAbstract
     }
 
     /**
+     * Emulate the set of a cached key, value pair if it doesn't already exist.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param integer $ttl (optional) default 86400
+     * @return boolean false
+     */
+    public function setIfNotExists($key, $value, $ttl = self::DEFAULT_TTL)
+    {
+        return false;
+    }
+
+    /**
      * Emulate the has of a cached value
      *
      * @param string $key

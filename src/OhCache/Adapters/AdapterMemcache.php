@@ -139,6 +139,39 @@ class AdapterMemcache extends AdapterAbstract
     }
 
     /**
+     * Set a value in cache if it doesn't already exist. Internally, this uses
+     * Memcache::add
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param integer $ttl
+     * @return boolean
+     */
+    public function setIfNotExists($key, $value, $ttl = self::DEFAULT_TTL)
+    {
+        if (!$this->hasConnection()) {
+            // @codeCoverageIgnoreStart
+            return false;
+            // @codeCoverageIgnoreEnd
+        }
+
+        $flag = null;
+
+        if (!is_bool($value) && !is_int($value) && !is_float($value)) {
+            $flag = MEMCACHE_COMPRESSED;
+        }
+
+        try {
+            return $this->memcache->add($key, $value, $flag, $ttl);
+            // @codeCoverageIgnoreStart
+        } catch (\Exception $e) {
+        }
+
+        return false;
+        // @codeCoverageIgnoreEnd
+    }
+
+    /**
      * Establish whether the cache contains a value with key of $key. Internally,
      * this method performs a get() on the key, so it's worth using get() instead
      * if you require a value.

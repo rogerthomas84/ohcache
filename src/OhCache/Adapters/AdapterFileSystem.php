@@ -110,7 +110,7 @@ class AdapterFileSystem extends AdapterAbstract
         }
 
         $val = @unserialize($pieces[1]);
-        if ($val === false) {
+        if ($val === false || $pieces[0] <= time()) {
             $this->remove($key);
             return false;
         }
@@ -141,6 +141,7 @@ class AdapterFileSystem extends AdapterAbstract
         if ($handle) {
             $data = time() + $ttl . PHP_EOL . serialize($value);
             $success = fwrite($handle, $data);
+            @fclose($handle);
             return ($success !== false);
         }
 

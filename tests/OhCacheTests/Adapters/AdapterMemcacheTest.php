@@ -66,7 +66,7 @@ class AdapterMemcacheTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGet()
     {
-        $this->adapter->set($this->name, 'foo', 10);
+        $this->assertTrue($this->adapter->set($this->name, 'foo', 10));
         $this->assertEquals('foo', $this->adapter->get($this->name));
     }
 
@@ -93,17 +93,17 @@ class AdapterMemcacheTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $this->adapter->set($this->name, 'foobar', 10);
+        $this->assertTrue($this->adapter->set($this->name, 'foobar', 10));
         $this->assertTrue($this->adapter->has($this->name));
         $this->assertEquals('foobar', $this->adapter->get($this->name));
-        $this->adapter->remove($this->name);
+        $this->assertTrue($this->adapter->remove($this->name));
         $this->assertFalse($this->adapter->has($this->name));
     }
 
     public function testRemove()
     {
-        $this->adapter->set($this->name, 'barfoo', 10);
-        $this->adapter->remove($this->name);
+        $this->assertTrue($this->adapter->set($this->name, 'barfoo', 10));
+        $this->assertTrue($this->adapter->remove($this->name));
         $this->assertFalse($this->adapter->has($this->name));
     }
 }

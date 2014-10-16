@@ -205,7 +205,7 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
         $adapter = new AdapterFileSystem(array('path' => $path));
         $this->assertFalse($adapter->set('abc', 'def', 100));
         rmdir($path);
-        $adapter->renew('abc', 'def', 100);
+        $this->assertFalse($adapter->renew('abc', 'def', 100));
     }
 
     public function testSetRenew()
@@ -224,10 +224,10 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $this->adapter->set($this->name, 'foobar', 10);
+        $this->assertTrue($this->adapter->set($this->name, 'foobar', 10));
         $this->assertTrue($this->adapter->has($this->name));
         $this->assertEquals('foobar', $this->adapter->get($this->name));
-        $this->adapter->remove($this->name);
+        $this->assertTrue($this->adapter->remove($this->name));
         $this->assertFalse($this->adapter->has($this->name));
     }
 

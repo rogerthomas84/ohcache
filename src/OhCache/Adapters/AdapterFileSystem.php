@@ -219,8 +219,10 @@ class AdapterFileSystem extends AdapterAbstract
             return false;
         }
 
-        $val = @unserialize($pieces[1]);
-        if (!$val) {
+        unset($pieces[0]);
+        $str = implode(PHP_EOL, $pieces);
+        $val = @unserialize($str);
+        if ($val === false) {
             $this->remove($key);
             return false;
         }

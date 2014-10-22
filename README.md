@@ -27,8 +27,8 @@ Quick Start
 
 OhCache exposes the following methods for Caching:
 
- * APC
- * Memcache
- * FileSystem
+ * `APC`
+ * `Memcache`
+ * `FileSystem`
 
 In addition to this, there is a `AdapterNull` which you can use for test (or development) purposes.

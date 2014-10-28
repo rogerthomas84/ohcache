@@ -47,13 +47,6 @@ class AdapterFileSystem extends AdapterAbstract
     const DS = DIRECTORY_SEPARATOR;
 
     /**
-     * Prefix for cache keys
-     *
-     * @var string
-     */
-    private $prefix = 'OHAFS_';
-
-    /**
      * Instance of FileSystemHelper
      *
      * @var FileSystemHelper|null
@@ -79,6 +72,11 @@ class AdapterFileSystem extends AdapterAbstract
         if (!array_key_exists('path', $config) || !is_dir($config['path']) || !is_writable($config['path'])) {
             throw new \Exception('"path" key must be specified and be a valid location');
         }
+        if (array_key_exists('prefix', $config)) {
+            $this->prefix = $config['prefix'];
+        } else {
+            $this->prefix = 'OHAFS_';
+        }
         $this->path = rtrim($config['path'], '/\\');
         $this->helper = new FileSystemHelper();
     }
@@ -93,7 +91,7 @@ class AdapterFileSystem extends AdapterAbstract
     {
         $md5 = md5($key);
         $folderPath = $this->getFolderPathFromMd5($md5);
-        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $md5;
+        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $this->getKeyString($md5);
         if (!file_exists($path) || !is_readable($path)) {
             return false;
         }
@@ -139,7 +137,7 @@ class AdapterFileSystem extends AdapterAbstract
             return false;
         }
         $basePaths = $this->path . self::DS . $folderPath;
-        $path = $basePaths . self::DS . $this->prefix . $md5;
+        $path = $basePaths . self::DS . $this->prefix . $this->getKeyString($md5);
 
         $handle = fopen($path, 'w');
         if ($handle) {
@@ -201,7 +199,7 @@ class AdapterFileSystem extends AdapterAbstract
     {
         $md5 = md5($key);
         $folderPath = $this->getFolderPathFromMd5($md5);
-        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $md5;
+        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $this->getKeyString($md5);
         if (!file_exists($path) || !is_readable($path)) {
             return false;
         }
@@ -240,7 +238,7 @@ class AdapterFileSystem extends AdapterAbstract
     {
         $md5 = md5($key);
         $folderPath = $this->getFolderPathFromMd5($md5);
-        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $md5;
+        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $this->getKeyString($md5);
         if (!file_exists($path) || !is_readable($path)) {
             return false;
         }

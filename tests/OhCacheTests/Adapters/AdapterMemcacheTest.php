@@ -53,11 +53,14 @@ class AdapterMemcacheTest extends \PHPUnit_Framework_TestCase
         }
         $this->name = md5(__CLASS__);
         $cacheConfig = array(
-            array(
-                'host' => 'localhost',
-                'port' => 11211,
-                'timeout' => 60,
-                'weight' => 1
+            'prefix' => 'TEST_',
+            'servers' => array(
+                array(
+                    'host' => 'localhost',
+                    'port' => 11211,
+                    'timeout' => 60,
+                    'weight' => 1
+                )
             )
         );
         $this->adapter = new AdapterMemcache($cacheConfig);

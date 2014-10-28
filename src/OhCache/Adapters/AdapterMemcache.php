@@ -47,17 +47,20 @@ class AdapterMemcache extends AdapterAbstract
      * Construct the adapter, giving an array of servers.
      * @example
      *     array(
-     *         array(
-     *             'host' => 'cache1.example.com',
-     *             'port' => 11211,
-     *             'weight' => 1,
-     *             'timeout' => 60
-     *         ),
-     *         array(
-     *             'host' => 'cache2.example.com',
-     *             'port' => 11211,
-     *             'weight' => 2,
-     *             'timeout' => 60
+     *         'prefix' => '',
+     *         'servers' => array(
+     *             array (
+     *                 'host' => 'cache1.example.com',
+     *                 'port' => 11211,
+     *                 'weight' => 1,
+     *                 'timeout' => 60
+     *             ),
+     *             array(
+     *                 'host' => 'cache2.example.com',
+     *                 'port' => 11211,
+     *                 'weight' => 2,
+     *                 'timeout' => 60
+     *             )
      *         )
      *     )
      * @param array $config
@@ -65,8 +68,11 @@ class AdapterMemcache extends AdapterAbstract
     public function __construct(array $config = array())
     {
         try {
+            if (array_key_exists('prefix', $config)) {
+                $this->prefix = $config['prefix'];
+            }
             $this->memcache = new \Memcache();
-            foreach ($config as $server) {
+            foreach ($config['servers'] as $server) {
                 $this->memcache->addserver(
                     $server['host'],
                     $server['port'],
@@ -97,7 +103,9 @@ class AdapterMemcache extends AdapterAbstract
         }
 
         try {
-            return $this->memcache->get($key);
+            return $this->memcache->get(
+                $this->getKeyString($key)
+            );
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
         }
@@ -124,7 +132,7 @@ class AdapterMemcache extends AdapterAbstract
 
         try {
             return $this->memcache->set(
-                $key,
+                $this->getKeyString($key),
                 $value,
                 $this->getFlagFromValue($value),
                 $ttl
@@ -156,7 +164,7 @@ class AdapterMemcache extends AdapterAbstract
 
         try {
             return $this->memcache->add(
-                $key,
+                $this->getKeyString($key),
                 $value,
                 $this->getFlagFromValue($value),
                 $ttl
@@ -206,7 +214,7 @@ class AdapterMemcache extends AdapterAbstract
         if ($value) {
             try {
                 return $this->memcache->replace(
-                    $key,
+                    $this->getKeyString($key),
                     $value,
                     $this->getFlagFromValue($value),
                     $ttl
@@ -235,7 +243,7 @@ class AdapterMemcache extends AdapterAbstract
         }
 
         try {
-            return $this->memcache->delete($key);
+            return $this->memcache->delete($this->getKeyString($key));
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {
         }

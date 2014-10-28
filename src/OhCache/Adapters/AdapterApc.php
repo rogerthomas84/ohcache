@@ -52,6 +52,9 @@ class AdapterApc extends AdapterAbstract
      */
     public function __construct(array $config = array())
     {
+        if (array_key_exists('prefix', $config)) {
+            $this->prefix = $config['prefix'];
+        }
         $this->checkExtension();
     }
 
@@ -69,7 +72,10 @@ class AdapterApc extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
-        $record = apc_fetch($key, $found);
+        $record = apc_fetch(
+            $this->getKeyString($key),
+            $found
+        );
         if ($found) {
             return $record;
         }
@@ -93,7 +99,11 @@ class AdapterApc extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
-        return apc_store($key, $value, $ttl);
+        return apc_store(
+            $this->getKeyString($key),
+            $value,
+            $ttl
+        );
     }
 
     /**
@@ -113,7 +123,11 @@ class AdapterApc extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
-        return apc_add($key, $value, $ttl);
+        return apc_add(
+            $this->getKeyString($key),
+            $value,
+            $ttl
+        );
     }
 
     /**
@@ -149,6 +163,7 @@ class AdapterApc extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
+        $key = $this->getKeyString($key);
         $val = apc_fetch($key, $fetched);
 
         if ($fetched) {
@@ -172,7 +187,7 @@ class AdapterApc extends AdapterAbstract
             // @codeCoverageIgnoreEnd
         }
 
-        return apc_delete($key);
+        return apc_delete($this->getKeyString($key));
     }
 
     /**

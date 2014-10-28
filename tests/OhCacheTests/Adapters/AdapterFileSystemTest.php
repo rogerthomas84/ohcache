@@ -63,7 +63,7 @@ class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
         $tmpDir = sys_get_temp_dir();
         $this->assertTrue($this->dir->createPath($tmpDir, 'OhCacheTests'));
         $this->path = $tmpDir . FileSystemHelper::DS . 'OhCacheTests';
-        $this->adapter = new AdapterFileSystem(array('path' => $this->path));
+        $this->adapter = new AdapterFileSystem(array('path' => $this->path, 'prefix' => 'TEST_'));
     }
 
     public function testSetGet()

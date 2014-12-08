@@ -42,6 +42,11 @@ abstract class AdapterAbstract
     const DEFAULT_TTL = 86400;
 
     /**
+     * @var string
+     */
+    protected $prefix = '';
+
+    /**
      * Constructor with optional config array
      *
      * @param array $config (optional)
@@ -114,4 +119,15 @@ abstract class AdapterAbstract
      * @return boolean
      */
     abstract public function flush();
+
+    /**
+     * Get a key name for a cache value.
+     *
+     * @param string $key
+     * @return string
+     */
+    protected function getKeyString($name)
+    {
+        return $this->prefix . $name;
+    }
 }

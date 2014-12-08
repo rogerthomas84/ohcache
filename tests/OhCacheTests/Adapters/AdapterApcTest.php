@@ -52,7 +52,7 @@ class AdapterApcTest extends \PHPUnit_Framework_TestCase
             return;
         }
         $this->name = md5(__CLASS__);
-        $this->adapter = new AdapterApc();
+        $this->adapter = new AdapterApc(array('prefix' => 'TEST_'));
         $this->adapter->flush();
     }
 

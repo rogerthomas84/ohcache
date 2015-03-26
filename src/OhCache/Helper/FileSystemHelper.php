@@ -84,9 +84,10 @@ class FileSystemHelper
     /**
      * Recursively delete files and folders, when given a base path
      * @param string $baseDirectory
+     * @param boolean $start (optional) default false
      * @return void
      */
-    public function recursivelyDeleteFromDirectory($baseDirectory)
+    public function recursivelyDeleteFromDirectory($baseDirectory, $start = false)
     {
         if (!is_dir($baseDirectory)) {
             return;
@@ -99,19 +100,24 @@ class FileSystemHelper
         );
 
         foreach ($files as $file) {
+            /* @var $file \SplFileInfo */
             $fname = $file->getFilename();
             if ($fname == '.' || $fname == '..') {
                 continue;
             }
 
             if ($file->isDir()) {
-                $this->recursivelyDeleteFromDirectory($file->getRealPath());
+                $this->recursivelyDeleteFromDirectory($file->getRealPath(), false);
             } else {
-                unlink($file->getRealPath());
+                if ($start === false) {
+                    unlink($file->getRealPath());
+                }
             }
         }
 
-        rmdir($baseDirectory);
+        if ($start === false) {
+            rmdir($baseDirectory);
+        }
 
         return;
     }

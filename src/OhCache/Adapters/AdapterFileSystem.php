@@ -254,8 +254,8 @@ class AdapterFileSystem extends AdapterAbstract
     public function flush()
     {
         try {
-            $this->helper->recursivelyDeleteFromDirectory($this->path);
-            return @mkdir($this->path);
+            $this->helper->recursivelyDeleteFromDirectory($this->path, true);
+            return true;
 
             // @codeCoverageIgnoreStart
         } catch (\Exception $e) {

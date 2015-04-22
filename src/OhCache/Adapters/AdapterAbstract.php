@@ -123,7 +123,7 @@ abstract class AdapterAbstract
     /**
      * Get a key name for a cache value.
      *
-     * @param string $key
+     * @param string $name
      * @return string
      */
     protected function getKeyString($name)

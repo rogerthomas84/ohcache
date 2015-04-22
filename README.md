@@ -17,7 +17,7 @@ To use OhCache with Composer, add the dependency (and version constraint) to you
 ```json
 {
     "require": {
-        "rogerthomas84/ohcache": "1.0.*"
+        "rogerthomas84/ohcache": "1.1.*"
     }
 }
 ```

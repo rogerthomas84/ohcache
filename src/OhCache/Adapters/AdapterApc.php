@@ -31,6 +31,7 @@ namespace OhCache\Adapters;
 
 use OhCache\Adapters\AdapterAbstract;
 use OhCache\Exception\ApcExtensionNotLoaded;
+
 /**
  * Interact with APC
  *

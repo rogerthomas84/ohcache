@@ -30,6 +30,7 @@
 namespace OhCache\Adapters;
 
 use OhCache\Adapters\AdapterAbstract;
+use OhCache\Exception\ApcExtensionNotLoaded;
 
 /**
  * Interact with APC
@@ -39,23 +40,16 @@ use OhCache\Adapters\AdapterAbstract;
 class AdapterApc extends AdapterAbstract
 {
     /**
-     * Whether PHP has the apc extension loaded.
-     *
-     * @var boolean
-     */
-    private $hasApc = false;
-
-    /**
      * Construct, and check the presence of the APC extension
      *
      * @param array $config
      */
     public function __construct(array $config = array())
     {
+        $this->checkExtension();
         if (array_key_exists('prefix', $config)) {
             $this->prefix = $config['prefix'];
         }
-        $this->checkExtension();
     }
 
     /**
@@ -66,12 +60,6 @@ class AdapterApc extends AdapterAbstract
      */
     public function get($key)
     {
-        if (!$this->hasApc) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
         $record = apc_fetch(
             $this->getKeyString($key),
             $found
@@ -93,12 +81,6 @@ class AdapterApc extends AdapterAbstract
      */
     public function set($key, $value, $ttl = self::DEFAULT_TTL)
     {
-        if (!$this->hasApc) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
         return apc_store(
             $this->getKeyString($key),
             $value,
@@ -117,12 +99,6 @@ class AdapterApc extends AdapterAbstract
      */
     public function setIfNotExists($key, $value, $ttl = self::DEFAULT_TTL)
     {
-        if (!$this->hasApc) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
         return apc_add(
             $this->getKeyString($key),
             $value,
@@ -157,12 +133,6 @@ class AdapterApc extends AdapterAbstract
      */
     public function renew($key, $ttl = self::DEFAULT_TTL)
     {
-        if (!$this->hasApc) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
         $key = $this->getKeyString($key);
         $val = apc_fetch($key, $fetched);
 
@@ -181,12 +151,6 @@ class AdapterApc extends AdapterAbstract
      */
     public function remove($key)
     {
-        if (!$this->hasApc) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
         return apc_delete($this->getKeyString($key));
     }
 
@@ -197,20 +161,17 @@ class AdapterApc extends AdapterAbstract
      */
     public function flush()
     {
-        if (!$this->hasApc) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
         return apc_clear_cache();
     }
 
     /**
      * Check if apc is enabled
+     * @throws ApcExtensionNotLoaded
      */
     private function checkExtension()
     {
-        $this->hasApc = (extension_loaded('apc'));
+        if (false === extension_loaded('apc')) {
+            throw new ApcExtensionNotLoaded('Apc Extension Not Loaded');
+        }
     }
 }

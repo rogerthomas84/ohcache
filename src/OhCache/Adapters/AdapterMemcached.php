@@ -84,6 +84,11 @@ class AdapterMemcached extends AdapterAbstract
                     $server['weight']
                 );
             }
+            if (array_key_exists('options', $config)) {
+                foreach ($config['options'] as $optionKey => $optionValue) {
+                    $this->memcached->setOption($optionKey, $optionValue);
+                }
+            }
         } catch (\Exception $e) {
             // @codeCoverageIgnoreStart
             $this->memcached = null;

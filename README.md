@@ -29,6 +29,7 @@ OhCache exposes the following methods for Caching:
 
  * `APC`
  * `Memcache`
+ * `Memcached`
  * `FileSystem`
 
 In addition to this, there is a `AdapterNull` which you can use for test (or development) purposes.

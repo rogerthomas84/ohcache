@@ -126,8 +126,8 @@ abstract class AdapterAbstract
      * @param string $name
      * @return string
      */
-    protected function getKeyString($name)
+    protected function getKeyString($key)
     {
-        return $this->prefix . $name;
+        return $this->prefix . $key;
     }
 }

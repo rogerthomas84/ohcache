@@ -31,11 +31,12 @@ namespace OhCacheTests\Adapters;
 
 use OhCache\Adapters\AdapterFileSystem;
 use OhCache\Helper\FileSystemHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * AdapterFileSystemTest
  */
-class AdapterFileSystemTest extends \PHPUnit_Framework_TestCase
+class AdapterFileSystemTest extends TestCase
 {
     /**
      * @var AdapterFileSystem

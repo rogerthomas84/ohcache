@@ -30,11 +30,12 @@
 namespace OhCache\Tests\Helper;
 
 use OhCache\Helper\FileSystemHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * FileSystemHelperTest
  */
-class FileSystemHelperTest extends \PHPUnit_Framework_TestCase
+class FileSystemHelperTest extends TestCase
 {
     public function testMakeInvalids()
     {

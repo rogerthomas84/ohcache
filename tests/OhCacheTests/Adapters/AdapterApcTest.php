@@ -30,11 +30,12 @@
 namespace OhCacheTests\Adapters;
 
 use OhCache\Adapters\AdapterApc;
+use PHPUnit\Framework\TestCase;
 
 /**
  * AdapterApcTest
  */
-class AdapterApcTest extends \PHPUnit_Framework_TestCase
+class AdapterApcTest extends TestCase
 {
     /**
      * @var AdapterApc

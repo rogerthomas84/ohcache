@@ -29,7 +29,7 @@
  */
 namespace OhCache\Adapters;
 
-use OhCache\Adapters\AdapterAbstract;
+use Exception;
 use OhCache\Helper\FileSystemHelper;
 
 /**
@@ -65,12 +65,12 @@ class AdapterFileSystem extends AdapterAbstract
      * to a writable folder.
      *
      * @param array $config
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(array $config = array())
     {
         if (!array_key_exists('path', $config) || !is_dir($config['path']) || !is_writable($config['path'])) {
-            throw new \Exception('"path" key must be specified and be a valid location');
+            throw new Exception('"path" key must be specified and be a valid location');
         }
         if (array_key_exists('prefix', $config)) {
             $this->prefix = $config['prefix'];
@@ -89,21 +89,7 @@ class AdapterFileSystem extends AdapterAbstract
      */
     public function get($key)
     {
-        $md5 = md5($key);
-        $folderPath = $this->getFolderPathFromMd5($md5);
-        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $this->getKeyString($md5);
-        if (!file_exists($path) || !is_readable($path)) {
-            return false;
-        }
-
-        $content = file_get_contents($path);
-        if (!$content) {
-            return false;
-        }
-
-        $pieces = explode(PHP_EOL, $content);
-        if (!is_array($pieces) || !is_numeric($pieces[0])) {
-            unlink($path);
+        if (false === $pieces = $this->getPiecesFromKey($key)) {
             return false;
         }
 
@@ -118,6 +104,32 @@ class AdapterFileSystem extends AdapterAbstract
         }
 
         return $val;
+    }
+
+    /**
+     * @param string $key
+     * @return array|bool
+     */
+    protected function getPiecesFromKey($key)
+    {
+        $md5 = md5($key);
+        $folderPath = $this->getFolderPathFromMd5($md5);
+        $path = $this->path . self::DS . $folderPath . self::DS . $this->getKeyString($md5);
+        if (!file_exists($path) || !is_readable($path)) {
+            return false;
+        }
+
+        $content = file_get_contents($path);
+        if (!$content) {
+            return false;
+        }
+
+        $pieces = explode(PHP_EOL, $content);
+        if (!is_array($pieces) || !is_numeric($pieces[0])) {
+            unlink($path);
+            return false;
+        }
+        return $pieces;
     }
 
     /**
@@ -137,7 +149,7 @@ class AdapterFileSystem extends AdapterAbstract
             return false;
         }
         $basePaths = $this->path . self::DS . $folderPath;
-        $path = $basePaths . self::DS . $this->prefix . $this->getKeyString($md5);
+        $path = $basePaths . self::DS . $this->getKeyString($md5);
 
         $handle = fopen($path, 'w');
         if ($handle) {
@@ -197,23 +209,7 @@ class AdapterFileSystem extends AdapterAbstract
      */
     public function renew($key, $ttl = self::DEFAULT_TTL)
     {
-        $md5 = md5($key);
-        $folderPath = $this->getFolderPathFromMd5($md5);
-        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $this->getKeyString($md5);
-        if (!file_exists($path) || !is_readable($path)) {
-            return false;
-        }
-
-        $content = file_get_contents($path);
-        if (!$content) {
-            // @codeCoverageIgnoreStart
-            return false;
-            // @codeCoverageIgnoreEnd
-        }
-
-        $pieces = explode(PHP_EOL, $content);
-        if (!is_array($pieces) || !is_numeric($pieces[0])) {
-            unlink($path);
+        if (false === $pieces = $this->getPiecesFromKey($key)) {
             return false;
         }
 
@@ -238,7 +234,7 @@ class AdapterFileSystem extends AdapterAbstract
     {
         $md5 = md5($key);
         $folderPath = $this->getFolderPathFromMd5($md5);
-        $path = $this->path . self::DS . $folderPath . self::DS . $this->prefix . $this->getKeyString($md5);
+        $path = $this->path . self::DS . $folderPath . self::DS . $this->getKeyString($md5);
         if (!file_exists($path) || !is_readable($path)) {
             return false;
         }
@@ -258,7 +254,7 @@ class AdapterFileSystem extends AdapterAbstract
             return true;
 
             // @codeCoverageIgnoreStart
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;

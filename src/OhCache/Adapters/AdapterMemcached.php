@@ -29,7 +29,8 @@
  */
 namespace OhCache\Adapters;
 
-use OhCache\Adapters\AdapterAbstract;
+use Exception;
+use Memcached;
 
 /**
  * Interact with Memcached
@@ -39,7 +40,7 @@ use OhCache\Adapters\AdapterAbstract;
 class AdapterMemcached extends AdapterAbstract
 {
     /**
-     * @var \Memcached
+     * @var Memcached
      */
     private $memcached = null;
 
@@ -72,10 +73,10 @@ class AdapterMemcached extends AdapterAbstract
             }
             if (array_key_exists('persistent_id', $config) && !empty($config['persistent_id'])) {
                 // @codeCoverageIgnoreStart
-                $this->memcached = new \Memcached($config['persistent_id']);
+                $this->memcached = new Memcached($config['persistent_id']);
             } else {
                 // @codeCoverageIgnoreEnd
-                $this->memcached = new \Memcached();
+                $this->memcached = new Memcached();
             }
             foreach ($config['servers'] as $server) {
                 $this->memcached->addserver(
@@ -89,7 +90,7 @@ class AdapterMemcached extends AdapterAbstract
                     $this->memcached->setOption($optionKey, $optionValue);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // @codeCoverageIgnoreStart
             $this->memcached = null;
             // @codeCoverageIgnoreEnd
@@ -114,13 +115,13 @@ class AdapterMemcached extends AdapterAbstract
             $result = $this->memcached->get(
                 $this->getKeyString($key)
             );
-            if ($result === \Memcached::RES_NOTFOUND) {
+            if ($result === Memcached::RES_NOTFOUND) {
                 return false;
             }
 
             return $result;
             // @codeCoverageIgnoreStart
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;
@@ -150,7 +151,7 @@ class AdapterMemcached extends AdapterAbstract
                 $ttl
             );
             // @codeCoverageIgnoreStart
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;
@@ -181,7 +182,7 @@ class AdapterMemcached extends AdapterAbstract
                 $ttl
             );
             // @codeCoverageIgnoreStart
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;
@@ -230,7 +231,7 @@ class AdapterMemcached extends AdapterAbstract
                     $ttl
                 );
                 // @codeCoverageIgnoreStart
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
         // @codeCoverageIgnoreEnd
@@ -255,7 +256,7 @@ class AdapterMemcached extends AdapterAbstract
         try {
             return $this->memcached->delete($this->getKeyString($key), 0);
             // @codeCoverageIgnoreStart
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;
@@ -278,7 +279,7 @@ class AdapterMemcached extends AdapterAbstract
         try {
             return $this->memcached->flush();
             // @codeCoverageIgnoreStart
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         return false;
@@ -291,6 +292,6 @@ class AdapterMemcached extends AdapterAbstract
      */
     private function hasConnection()
     {
-        return ($this->memcached instanceof \Memcached);
+        return ($this->memcached instanceof Memcached);
     }
 }

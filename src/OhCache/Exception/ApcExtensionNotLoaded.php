@@ -29,9 +29,11 @@
  */
 namespace OhCache\Exception;
 
+use Exception;
+
 /**
  * ApcExtensionNotLoaded
  */
-class ApcExtensionNotLoaded extends \Exception
+class ApcExtensionNotLoaded extends Exception
 {
 }

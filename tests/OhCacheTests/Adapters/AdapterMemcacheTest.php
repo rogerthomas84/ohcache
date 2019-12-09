@@ -30,11 +30,12 @@
 namespace OhCacheTests\Adapters;
 
 use OhCache\Adapters\AdapterMemcache;
+use PHPUnit\Framework\TestCase;
 
 /**
  * AdapterMemcacheTest
  */
-class AdapterMemcacheTest extends \PHPUnit_Framework_TestCase
+class AdapterMemcacheTest extends TestCase
 {
     /**
      * @var AdapterMemcache

@@ -29,7 +29,6 @@
  */
 namespace OhCache\Adapters;
 
-use OhCache\Adapters\AdapterAbstract;
 use OhCache\Exception\ApcExtensionNotLoaded;
 
 /**
@@ -43,6 +42,7 @@ class AdapterApc extends AdapterAbstract
      * Construct, and check the presence of the APC extension
      *
      * @param array $config
+     * @throws ApcExtensionNotLoaded
      */
     public function __construct(array $config = array())
     {

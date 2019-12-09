@@ -29,8 +29,6 @@
  */
 namespace OhCache\Adapters;
 
-use OhCache\Adapters\AdapterAbstract;
-
 /**
  * An adapter for use in Tests, or development environments
  *

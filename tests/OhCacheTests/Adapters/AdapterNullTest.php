@@ -30,8 +30,9 @@
 namespace OhCacheTests\Adapters;
 
 use OhCache\Adapters\AdapterNull;
+use PHPUnit\Framework\TestCase;
 
-class AdapterNullTest extends \PHPUnit_Framework_TestCase
+class AdapterNullTest extends TestCase
 {
     public function testSet()
     {

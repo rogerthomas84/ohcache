@@ -29,6 +29,9 @@
  */
 namespace OhCache\Helper;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 /**
  * Provides a simple way of interacting with the file system
  *
@@ -93,16 +96,16 @@ class FileSystemHelper
             return;
         }
 
-        $iterator = new \RecursiveDirectoryIterator($baseDirectory);
-        $files = new \RecursiveIteratorIterator(
+        $iterator = new RecursiveDirectoryIterator($baseDirectory);
+        $files = new RecursiveIteratorIterator(
             $iterator,
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($files as $file) {
             /* @var $file \SplFileInfo */
-            $fname = $file->getFilename();
-            if ($fname == '.' || $fname == '..') {
+            $fileName = $file->getFilename();
+            if (in_array($fileName, ['.', '..'])) {
                 continue;
             }
 

@@ -1,4 +1,5 @@
 <?php
+$_SESSION = [];
 
 $path = realpath(dirname(__FILE__) . '/../');
 
